@@ -1,0 +1,11 @@
+sudo: required
+
+services:
+  - docker
+  
+before_install:
+  docker build -t govkumardocker/sp-security-db:1.0.0-SNAPSHOT .
+  
+script:
+  docker login -u govkumardocker -p govdocker123
+  docker push govkumardocker/sp-security-db:1.0.0-SNAPSHOT

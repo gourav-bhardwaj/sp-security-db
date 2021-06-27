@@ -1,0 +1,16 @@
+server:
+  port: 8090  servlet:    context-path: /sp-secure-docker
+  
+spring:  datasource:    url: jdbc:postgresql://localhost:5432/spdb
+    username: postgres
+    password: gobca
+    driver-class-name: org.postgresql.Driver
+  jpa:    database: POSTGRESQL
+    generate-ddl: true
+    hibernate:      ddl-auto: update
+    show-sql: true
+    
+springdoc:  api-docs:    enabled: true
+    path: /v2/api-docs
+  swagger-ui:    enabled: true
+    path: /api-swagger-ui

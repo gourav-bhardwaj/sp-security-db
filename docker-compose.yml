@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  postgres-db:
+    image: postgres
+    networks:
+      - sp-app 
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: govabc234
+      
+  sp-security-db:
+    image: sp-security-db
+    build: .
+    ports:
+      - "8090:8090"
+    depends_on:
+      - "postgres-db"
+    networks:
+      - sp-app  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: govabc234
+      
+networks:
+  sp-app:   

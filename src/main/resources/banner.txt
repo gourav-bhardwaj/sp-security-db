@@ -1,0 +1,13 @@
+                                                                
+                                                                
+ .-.             .-.                     .            .--. .--. 
+(   )           (   )                 o _|_           |   :|   )
+ `-. .,-.  ____  `-.  .-. .-..  . .--..  |  .  . ____ |   ||--: 
+(   )|   )      (   )(.-'(   |  | |   |  |  |  |      |   ;|   )
+ `-' |`-'        `-'  `--'`-'`--`-' -' `-`-'`--|      '--' '--' 
+     |                                         ;                
+     '                                      `-' 
+     Spring Boot : ${spring-boot.formatted-version}
+     Application Name : ${application.title}
+     Application Version : ${application.version}
+                     

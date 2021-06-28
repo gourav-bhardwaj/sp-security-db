@@ -1,6 +1,5 @@
 package com.sp;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,9 +16,6 @@ import com.sp.constants.Roles;
 @Configuration
 public class SpSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private SpAuthProvider authProvider;
-
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -28,15 +24,15 @@ public class SpSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/signIn").permitAll()
+		http.authorizeRequests()
 		.antMatchers("/signUp").permitAll()
 		.antMatchers("/logout").permitAll()
 		.antMatchers("/v2/api-docs").hasRole(Roles.ROLE_ADMIN)
 		.antMatchers("/api-swagger-ui").hasRole(Roles.ROLE_ADMIN)
 		.antMatchers("/roles", "/roles/**").hasRole(Roles.ROLE_ADMIN)
 		.anyRequest().authenticated()
-		.and().authenticationProvider(authProvider)
-		.exceptionHandling().authenticationEntryPoint(new SpAuthEntrypoint())
+		.and().formLogin()
+		.and().exceptionHandling().authenticationEntryPoint(new SpAuthEntrypoint())
 		.and().csrf().disable();
 	}
 	

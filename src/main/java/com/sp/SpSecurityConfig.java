@@ -2,7 +2,7 @@ package com.sp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,15 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sp.constants.Roles;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SpSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
@@ -31,9 +26,7 @@ public class SpSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/api-swagger-ui").hasRole(Roles.ROLE_ADMIN)
 		.antMatchers("/roles", "/roles/**").hasRole(Roles.ROLE_ADMIN)
 		.anyRequest().authenticated()
-		.and().formLogin()
-		.and().exceptionHandling().authenticationEntryPoint(new SpAuthEntrypoint())
-		.and().csrf().disable();
+		.and().formLogin().and().csrf().disable();
 	}
 	
 	@Bean

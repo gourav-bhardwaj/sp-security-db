@@ -50,7 +50,7 @@ public class EmployeeRoleServiceImpl implements EmployeeRoleService {
 
 	@Override
 	public EmployeeRole getEmployeeRoleByCode(String empRole) {
-		if (null == empRole || StringUtils.hasText(empRole)) {
+		if (null == empRole || !StringUtils.hasText(empRole)) {
 			throw new IllegalArgumentException("Invalid empRole");
 		}
 		List<EmployeeRole> roles = this.repository.findByEmpRoleCode("ROLE_" + empRole.toUpperCase().replaceAll("\\s", "_"));

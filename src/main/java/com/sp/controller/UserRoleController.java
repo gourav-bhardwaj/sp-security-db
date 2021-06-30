@@ -1,10 +1,12 @@
 package com.sp.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +50,13 @@ public class UserRoleController {
 		}
 		EmployeeRole roleObj = this.employeeRoleService.getEmployeeRoleByCode(roleCode);
 		return ResponseEntity.ok(new GenericResponse(HttpStatus.OK.value(), null, null, roleObj));
+	}
+	
+	@PreAuthorize("hasRole('ADMIN_00')")
+	@GetMapping("roles")
+	public ResponseEntity<GenericResponse> getEmployeeRoles() {
+		List<EmployeeRole> roles = this.employeeRoleService.getEmployeeRoles();
+		return ResponseEntity.ok(new GenericResponse(HttpStatus.OK.value(), null, roles, null));
 	}
 
 }

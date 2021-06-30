@@ -1,16 +1,13 @@
 package com.sp.controller;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +24,8 @@ import com.sp.mapper.EmployeeMapper;
 import com.sp.service.EmployeeRoleService;
 import com.sp.service.EmployeeService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
 public class UserAuthController {
-	
-	@Autowired
-	private AuthenticationManager authManager;
 	
 	@Autowired
 	private EmployeeService employeeService;
@@ -44,19 +35,6 @@ public class UserAuthController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	@PostMapping("/signIn")
-	public ResponseEntity<GenericResponse> signInProcess(@RequestBody UserAuthDTO userAuth) {
-		try {
-			this.authManager.authenticate(new UsernamePasswordAuthenticationToken(userAuth.getEmail(), userAuth.getPassword()));
-		} catch (BadCredentialsException | AccountExpiredException 
-				| LockedException | CredentialsExpiredException ex) {
-			log.error("Error occured during signInProcess : {}", ex.getMessage());
-		}
-		EmployeeMapper employeeDto = new EmployeeMapper(this.employeeService.getEmployeeByEmail(userAuth.getEmail()));
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(employeeDto.getUsername(), null, employeeDto.getAuthorities()));
-		return ResponseEntity.ok(new GenericResponse(HttpStatus.OK.value(), "Employee has been logged in successfully", null, employeeDto));
-	}
 	
 	@PostMapping("/signUp")
 	public ResponseEntity<GenericResponse> signUpProcess(@RequestBody UserAuthDTO userAuth) {
@@ -80,6 +58,14 @@ public class UserAuthController {
 	public void logoutProcess() {
 		SecurityContextHolder.getContext().setAuthentication(null);
 		SecurityContextHolder.clearContext();
+	}
+	
+	@PreAuthorize("hasRole('ADMIN_00')")
+	@GetMapping("/users")
+	public ResponseEntity<GenericResponse> getAllUsers() {
+		List<EmployeeMapper> employees = this.employeeService.getEmployees().stream().map(EmployeeMapper::new)
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(new GenericResponse(HttpStatus.OK.value(), null, employees, null));
 	}
 
 }

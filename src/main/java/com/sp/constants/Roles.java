@@ -8,5 +8,7 @@ public class Roles {
 	
 	public static final String ROLE_ADMIN = "ADMIN_00";
 	
+	public static final String ROLE_USER = "USER_00";
+	
 	public static final String ROLE_SUPER_ADMIN = "SUPER_ADMIN_00";
 }

@@ -26,7 +26,8 @@ public class SpSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/api-swagger-ui").hasRole(Roles.ROLE_ADMIN)
 		.antMatchers("/roles", "/roles/**").hasRole(Roles.ROLE_ADMIN)
 		.anyRequest().authenticated()
-		.and().formLogin().and().csrf().disable();
+		.and().formLogin().defaultSuccessUrl("/api-swagger-ui")
+		.and().csrf().disable();
 	}
 	
 	@Bean

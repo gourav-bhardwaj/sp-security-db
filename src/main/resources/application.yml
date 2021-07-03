@@ -1,5 +1,5 @@
 server:
-  port: 8090  servlet:    context-path: /sp-secure-docker
+  port: 8090
   
 spring:  datasource:    url: jdbc:postgresql://localhost:5432/spdb
     username: postgres
